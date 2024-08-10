@@ -10,6 +10,7 @@ void adicionarPedido(Pedido **lista, int id, char *descricao) {
     strcpy(novo->descricao, descricao); // Copia a descrição do pedido
     novo->prox = *lista; // Aponta o novo pedido para o início da lista
     *lista = novo; // Atualiza a lista para incluir o novo pedido
+    printf("\n----Pedido adicionado com sucesso!----\n");
 }
 
 // Função para remover um pedido da lista de pedidos
@@ -19,28 +20,57 @@ void removerPedido(Pedido **lista, int id) {
         prev = temp;
         temp = temp->prox;
     }
-    if (temp == NULL) return; // Pedido não encontrado
+    if (temp == NULL){
+        printf("\n----Pedido não encontrado.----\n");
+        return;
+    } // Pedido não encontrado
     if (prev == NULL) *lista = temp->prox; // Remove o primeiro pedido da lista
     else prev->prox = temp->prox; // Remove um pedido no meio ou no final da lista
+    printf("\n----Pedido removido com sucesso!----\n");
     free(temp); // Libera a memória do pedido removido
 }
 
 // Função para processar um pedido, movendo-o da lista de pedidos pendentes para a fila de processamento
 void processarPedido(Pedido **lista, Fila *fila) {
-    if (*lista == NULL) return; // Verifica se a lista de pedidos está vazia
-    Pedido *pedido = *lista; // Aponta para o primeiro pedido da lista
-    *lista = (*lista)->prox; // Remove o pedido da lista
-    pedido->prox = NULL; // Define o próximo do pedido como NULL
-    if (fila->fim == NULL) { // Verifica se a fila está vazia
-        fila->inicio = fila->fim = pedido; // Adiciona o pedido como o único elemento na fila
-    } else {
-        fila->fim->prox = pedido; // Adiciona o pedido no final da fila
-        fila->fim = pedido; // Atualiza o ponteiro do final da fila
+    if (*lista == NULL){
+        printf("\n----Não há pedidos para serem processados.----\n");
+        return;
+    } // Verifica se a lista de pedidos está vazia
+    
+    Pedido *temp = *lista;
+    Pedido *prev = NULL;
+    
+    // Percorre a lista até encontrar o último pedido
+    while (temp->prox != NULL) {
+        prev = temp;
+        temp = temp->prox;
     }
+    
+    if (prev != NULL) {
+        prev->prox = NULL; // Remove o último pedido da lista
+    } else {
+        *lista = NULL; // A lista tinha apenas um elemento, agora fica vazia
+    }
+    
+    temp->prox = NULL; // Define o próximo do pedido como NULL
+    
+    // Adiciona o pedido na fila de processamento
+    if (fila->fim == NULL) { // Verifica se a fila está vazia
+        fila->inicio = fila->fim = temp; // Adiciona o pedido como o único elemento na fila
+    } else {
+        fila->fim->prox = temp; // Adiciona o pedido no final da fila
+        fila->fim = temp; // Atualiza o ponteiro do final da fila
+    }
+    printf("\n----Pedido processado com sucesso!----\n");
 }
 
 // Função para listar todos os pedidos pendentes
 void listarPedidosPendentes(Pedido *lista) {
+    if (lista == NULL) { // Verifica se a lista está vazia
+        printf("\n----Não há pedidos pendentes.----\n"); // Exibe a mensagem
+        return;
+    }
+
     Pedido *temp = lista; // Ponteiro temporário para percorrer a lista
     while (temp != NULL) {
         printf("ID: %d, Descrição: %s\n", temp->id, temp->descricao); // Exibe os detalhes do pedido
@@ -50,6 +80,11 @@ void listarPedidosPendentes(Pedido *lista) {
 
 // Função para listar todos os pedidos em processamento
 void listarPedidosEmProcessamento(Fila *fila) {
+    if (fila ->inicio == NULL) { // Verifica se a fila está vazia
+        printf("\n----Não há pedidos em processamento.----\n"); // Exibe a mensagem
+        return;
+    }
+
     Pedido *temp = fila->inicio; // Ponteiro temporário para percorrer a fila
     while (temp != NULL) {
         printf("ID: %d, Descrição: %s\n", temp->id, temp->descricao); // Exibe os detalhes do pedido
@@ -80,5 +115,5 @@ void exibirCardapio() {
     printf("2. Cheesecake de Frutas Vermelhas\n");
     printf("3. Mousse de Chocolate\n");
     printf("4. Pudim de Leite\n");
-    printf("5. Sorvete de Baunilha com Calda de Morango\n");
+    printf("5. Sorvete de Baunilha com Calda de Morango\n\n\n");
 }
