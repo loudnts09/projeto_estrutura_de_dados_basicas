@@ -40,14 +40,14 @@ void processarPedido(Pedido **lista, Fila *fila) {
     Pedido *temp = *lista;
     Pedido *prev = NULL;
     
-    // Percorre a lista até encontrar o último pedido
+    // Percorre a lista até encontrar o primeiro pedido
     while (temp->prox != NULL) {
         prev = temp;
         temp = temp->prox;
     }
     
     if (prev != NULL) {
-        prev->prox = NULL; // Remove o último pedido da lista
+        prev->prox = NULL; // Remove o primeiro pedido da lista
     } else {
         *lista = NULL; // A lista tinha apenas um elemento, agora fica vazia
     }
