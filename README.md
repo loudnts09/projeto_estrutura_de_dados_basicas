@@ -1,4 +1,4 @@
-# Sistema de Gerenciamento de Pedidos de Restaurante (versão 1.0)
+# Sistema de Gerenciamento de Pedidos de Restaurante
 
 ## Descrição
 
